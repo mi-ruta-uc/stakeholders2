@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masterclass Rectificada: Stakeholders 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root { --sky-primary: #0ea5e9; --navy-dark: #0f172a; }
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; overflow-x: hidden; background-color: #f8fafc; }
+        h1, h2, h3, .font-outfit { font-family: 'Outfit', sans-serif; }
+        
+        .infographic-container { max-width: 1400px; margin: 0 auto; background: white; position: relative; }
+        
+        /* RECTIFICACIÓN DE MATRIZ: Cuadrante 2x2 Blindado */
+        .matrix-fixed-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            grid-template-rows: 1fr 1fr !important;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 650px;
+            aspect-ratio: 1/1;
+            margin: auto;
+        }
+
+        .card-3d {
+            transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1), box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+            border: 1px solid #e2e8f0;
+        }
+        .card-3d:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+            border-color: var(--sky-primary);
+        }
+
+        /* RECTIFICACIÓN DE MODO PRESENTACIÓN */
+        .presentation-mode { height: 100vh !important; overflow: hidden !important; background-color: var(--navy-dark) !important; }
+        
+        .presentation-mode .infographic-container {
+            max-width: 100% !important; height: 100vh !important;
+            background: transparent !important; display: flex !important; align-items: center; justify-content: center;
+        }
+
+        .presentation-mode section, .presentation-mode header {
+            display: none; width: 95%; max-width: 1600px; height: 88vh; 
+            margin: auto; background: white; border-radius: 2.5rem; 
+            padding: 4rem 5rem !important; position: relative; z-index: 100;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
+            overflow-y: auto;
+        }
+        .presentation-mode section::-webkit-scrollbar { width: 8px; }
+        .presentation-mode section::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); border-radius: 10px; }
+
+        .presentation-mode .active-slide { display: flex !important; flex-direction: column; justify-content: center; animation: fadeInScale 0.6s ease-out; }
+        
+        /* Ocultar footer y otros elementos distractores en modo presentación */
+        .presentation-mode footer, .presentation-mode #roadmap-section { display: none !important; }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* CONTROLES DE NAVEGACIÓN RECTIFICADOS */
+        .nav-ui {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            z-index: 1000; background: rgba(15, 23, 42, 0.95);
+            padding: 12px 50px; border-radius: 100px; display: none;
+            gap: 40px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15);
+        }
+        .presentation-mode .nav-ui { display: flex; }
+
+        .btn-action {
+            position: fixed; top: 1.5rem; right: 1.5rem; z-index: 1000;
+            display: flex; gap: 12px;
+        }
+
+        .stakeholder-dot {
+            position: absolute; width: 28px; height: 28px; border-radius: 50%;
+            background: var(--sky-primary); border: 4px solid white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3); transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
+            z-index: 10;
+        }
+
+        /* FIXED CSS: Agregado estilo para la etiqueta de los dots en el taller */
+        .stakeholder-label {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--navy-dark);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 900;
+            white-space: nowrap;
+            pointer-events: none;
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.4);
+            text-transform: uppercase;
+        }
+        
+        .stakeholder-label::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px 5px 0;
+            border-style: solid;
+            border-color: var(--navy-dark) transparent transparent transparent;
+        }
+
+        .bg-gradient-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        }
+
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div class="btn-action">
+        <button onclick="togglePresentationMode()" class="bg-indigo-600 text-white px-7 py-3 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-indigo-500 transition-all shadow-xl ring-2 ring-indigo-400/30">
+            <i class="fa-solid fa-person-chalkboard mr-2"></i> <span id="mode-text">Presentación</span>
+        </button>
+        <button onclick="scrollToWorkshop()" class="bg-sky-500 text-white px-7 py-3 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-sky-400 transition-all shadow-xl ring-2 ring-sky-400/30">
+            Simulador <i class="fa-solid fa-arrow-right ml-2"></i>
+        </button>
+    </div>
+
+    <div class="nav-ui shadow-2xl">
+        <button onclick="prevSlide()" class="text-indigo-300 hover:text-white p-2 transition-all hover:scale-110 active:scale-90"><i class="fa-solid fa-chevron-left text-3xl"></i></button>
+        <span id="slideIndicator" class="text-white font-black text-2xl flex items-center tracking-[0.3em]">1 / 8</span>
+        <button onclick="nextSlide()" class="text-indigo-300 hover:text-white p-2 transition-all hover:scale-110 active:scale-90"><i class="fa-solid fa-chevron-right text-3xl"></i></button>
+    </div>
+
+    <div class="infographic-container min-h-screen" id="app-container">
+        
+        <!-- DIAPOSITIVA 0: PORTADA -->
+        <header id="slide0" class="active-slide relative overflow-hidden py-40 px-12 text-center bg-gradient-header text-white border-b-8 border-sky-500">
+            <div class="absolute inset-0 opacity-20 mix-blend-overlay">
+                <img src="https://i.imgur.com/BNdnglt.jpeg" alt="" class="w-full h-full object-cover">
+            </div>
+            <!-- Grid geométrica decorativa -->
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5Y2EyYWIiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djIwaC0ydi0yMEgzNHYyaC0ydjIwaC0ydjIwaC0yeiIvPjwvZz48L2c+PC9zdmc+')]"></div>
+
+            <div class="relative z-10 flex flex-col items-center justify-center h-full max-w-5xl mx-auto">
+                <div class="inline-flex items-center gap-3 bg-sky-500/10 border border-sky-500/30 text-sky-400 px-6 py-2 rounded-full font-black text-xs uppercase tracking-[0.3em] mb-10 backdrop-blur-sm">
+                    <i class="fa-solid fa-layer-group"></i> Masterclass Avanzada
+                </div>
+                <h1 class="text-7xl md:text-[8rem] font-black tracking-tighter mb-8 leading-[0.9] text-white">
+                    STAKEHOLDER<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-400 to-purple-400 mt-2 block">MAPPING 2026</span>
+                </h1>
+                <p class="text-2xl text-slate-300 font-light leading-relaxed max-w-4xl mx-auto mt-2">
+                    Aprende la <strong>gestión de los grupos de interés</strong>. Al identificar y priorizar a los actores clave, podrás reducir riesgos y asegurar el éxito de tus iniciativas empresariales.
+                </p>
+                <div class="mt-16 flex gap-6">
+                    <button onclick="nextSlide()" class="bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 px-12 py-5 rounded-full font-black text-lg uppercase transition-all active:scale-95 shadow-[0_0_30px_-5px_rgba(14,165,233,0.4)] text-white ring-2 ring-white/10">Iniciemos la Teoría</button>
+                    <button onclick="scrollToWorkshop()" class="bg-white/5 hover:bg-white/10 border border-white/20 px-12 py-5 rounded-full font-bold text-lg uppercase transition-all active:scale-95 text-white backdrop-blur-md">Saltar al Simulador</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- DIAPOSITIVA 1: DEFINICIÓN EXPERTA (NUEVA) -->
+        <section id="slide1" class="py-24 px-12 md:px-20 bg-white border-b border-slate-100 relative">
+            <div class="absolute top-0 right-0 w-1/2 h-full bg-slate-50/50 clip-path-diagonal"></div>
+            <div class="relative z-10 max-w-7xl mx-auto">
+                <div class="flex items-center gap-6 mb-16">
+                    <span class="text-6xl font-black text-sky-200 uppercase tracking-tighter">01</span>
+                    <h2 class="text-5xl font-black uppercase text-slate-900 tracking-tight leading-none">¿Qué es realmente<br><span class="text-sky-600">el Mapa de Stakeholders?</span></h2>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-8">
+                        <p class="text-2xl text-slate-700 leading-relaxed font-light">
+                            El <strong>Mapa de Stakeholders</strong> es una herramienta visual muy valiosa en la dirección de proyectos y empresas. 
+                        </p>
+                        <p class="text-xl text-slate-600 leading-relaxed">
+                            Permite <strong>identificar de forma simple a todas las personas, grupos o entidades</strong> (internos y externos) que pueden influir en un proyecto o que se verán afectados por él.
+                        </p>
+                        <div class="bg-indigo-50 border-l-8 border-indigo-500 p-8 mt-8">
+                            <h4 class="font-black text-indigo-900 uppercase text-sm tracking-widest mb-3">El Propósito Central</h4>
+                            <p class="text-indigo-800">Una vez identificados, la organización puede diseñar un <strong>plan de involucramiento</strong>, garantizando su apoyo y deteniendo los conflictos a tiempo.</p>
+                        </div>
+                    </div>
+                    <div class="rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white ring-1 ring-slate-200 order-first lg:order-last">
+                        <img src="https://i.imgur.com/hQr645Q.jpeg" alt="Estrategia Corporativa" class="w-full h-[450px] object-cover hover:scale-105 transition-transform duration-700">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 2: LOS 5 PASOS DEL MAPEO (NUEVA BASADA EN UNIR) -->
+        <section id="slide2" class="py-24 px-12 md:px-20 bg-slate-900 border-b border-indigo-900/50 relative text-white">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#1e1b4b_0%,#0f172a_100%)]"></div>
+            <div class="relative z-10 max-w-7xl mx-auto">
+                <div class="flex items-center gap-6 mb-20">
+                    <span class="text-6xl font-black text-slate-700 uppercase tracking-tighter">02</span>
+                    <h2 class="text-5xl font-black uppercase tracking-tight leading-none">Metodología Experta:<br><span class="text-indigo-400">Los 5 Pasos Críticos</span></h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <!-- Paso 1 -->
+                    <div class="bg-slate-800/50 p-8 rounded-[2rem] border border-slate-700/50 hover:bg-slate-800 transition-colors group">
+                        <span class="text-5xl font-black text-slate-700/50 group-hover:text-indigo-500/30 transition-colors block mb-6">01</span>
+                        <h4 class="font-black text-white text-xl mb-4 italic">Identificación</h4>
+                        <p class="text-sm font-light text-slate-300 leading-relaxed">Crea una lista de todos los agentes involucrados: clientes, empleados, inversores, competidores y autoridades.</p>
+                    </div>
+                    <!-- Paso 2 -->
+                    <div class="bg-slate-800/50 p-8 rounded-[2rem] border border-slate-700/50 hover:bg-slate-800 transition-colors group">
+                        <span class="text-5xl font-black text-slate-700/50 group-hover:text-indigo-500/30 transition-colors block mb-6">02</span>
+                        <h4 class="font-black text-white text-xl mb-4 italic">Análisis</h4>
+                        <p class="text-sm font-light text-slate-300 leading-relaxed">Estudia a cada actor para comprender bien sus intereses y su capacidad de intervenir en los resultados.</p>
+                    </div>
+                    <!-- Paso 3 -->
+                    <div class="bg-sky-600 p-8 rounded-[2rem] border border-sky-400 shadow-xl transform lg:-translate-y-4 ring-4 ring-sky-500/20">
+                        <span class="text-5xl font-black text-sky-300/50 block mb-6">03</span>
+                        <h4 class="font-black text-white text-xl mb-4 italic">Clasificación</h4>
+                        <p class="text-sm font-medium text-white/90 leading-relaxed">Ubica a los agentes en los cuadrantes de una matriz midiendo su Nivel de Poder y Nivel de Interés.</p>
+                    </div>
+                    <!-- Paso 4 -->
+                    <div class="bg-slate-800/50 p-8 rounded-[2rem] border border-slate-700/50 hover:bg-slate-800 transition-colors group">
+                        <span class="text-5xl font-black text-slate-700/50 group-hover:text-indigo-500/30 transition-colors block mb-6">04</span>
+                        <h4 class="font-black text-white text-xl mb-4 italic">Estrategia</h4>
+                        <p class="text-sm font-light text-slate-300 leading-relaxed">Haz un Plan de Comunicación. Fija qué información transmitir y cada cuánto, basándote en la categoría del actor.</p>
+                    </div>
+                    <!-- Paso 5 -->
+                    <div class="bg-slate-800/50 p-8 rounded-[2rem] border border-slate-700/50 hover:bg-slate-800 transition-colors group">
+                        <span class="text-5xl font-black text-slate-700/50 group-hover:text-indigo-500/30 transition-colors block mb-6">05</span>
+                        <h4 class="font-black text-white text-xl mb-4 italic">Monitoreo</h4>
+                        <p class="text-sm font-light text-slate-300 leading-relaxed">Revisa continuamente. Los actores cambian de opinión y de poder con el tiempo, por lo que el mapa siempre es dinámico.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 3: AMPLIACIÓN DE BENEFICIOS (UNIR) -->
+        <section id="slide3" class="py-24 px-12 md:px-20 bg-slate-50 border-b border-slate-200">
+            <div class="max-w-7xl mx-auto flex flex-col xl:flex-row gap-16 items-center">
+                
+                <div class="flex-1">
+                    <div class="flex items-center gap-6 mb-16">
+                        <span class="text-6xl font-black text-slate-200 uppercase tracking-tighter">03</span>
+                        <h2 class="text-5xl font-black uppercase tracking-tight text-slate-900 leading-none">Beneficios de Impacto<br><span class="text-indigo-600 text-3xl block mt-2 tracking-wide font-normal">Gestión de Relaciones Corporativas</span></h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
+                        <div class="bg-white p-8 rounded-[2rem] shadow-lg card-3d border border-slate-100">
+                            <div class="w-14 h-14 rounded-[1rem] bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-comments-dollar"></i></div>
+                            <h4 class="font-black text-slate-900 uppercase mb-3 text-[15px]">Comunicación</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">Llegar a la persona correcta ayuda a desarrollar información específica, manteniendo una conversación sin confusiones.</p>
+                        </div>
+                        
+                        <div class="bg-white p-8 rounded-[2rem] shadow-lg card-3d border border-slate-100">
+                            <div class="w-14 h-14 rounded-[1rem] bg-sky-50 text-sky-600 flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-handshake-angle"></i></div>
+                            <h4 class="font-black text-slate-900 uppercase mb-3 text-[15px]">Colaboración</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">Hacer partícipes a los actores clave desde el comienzo fomenta su apoyo y transforma la oposición en una verdadera fuerza colaborativa.</p>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-[2rem] shadow-lg card-3d border border-slate-100">
+                            <div class="w-14 h-14 rounded-[1rem] bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-crosshairs"></i></div>
+                            <h4 class="font-black text-slate-900 uppercase mb-3 text-[15px]">Recursos</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">El mapa nos dice dónde priorizar el presupuesto y tiempo, dándole energía a las relaciones más productivas y urgentes.</p>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-[2rem] shadow-lg card-3d border border-slate-100">
+                            <div class="w-14 h-14 rounded-[1rem] bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-shield-virus"></i></div>
+                            <h4 class="font-black text-slate-900 uppercase mb-3 text-[15px]">Riesgos Ocultos</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">Visibiliza a los aliados o a entidades no obvias que podrían detener el proyecto, dándote margen para tener un plan B preparado.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full xl:w-1/3 mt-10 xl:mt-0 rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/50 ring-1 ring-slate-200 relative group cursor-pointer" onclick="openModal('https://www.unir.net/wp-content/uploads/2024/09/Stakeholders-mapping-concepto-usos-y-como-desarrollarlo-grafico2.jpg')">
+                    <img src="https://www.unir.net/wp-content/uploads/2024/09/Stakeholders-mapping-concepto-usos-y-como-desarrollarlo-grafico2.jpg" alt="Mapa de Stakeholders Oficial UNIR" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <i class="fa-solid fa-expand text-white text-5xl drop-shadow-lg"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 4: MAPA DE STAKEHOLDERS -->
+        <section id="slide4" class="py-24 px-12 md:px-20 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 border-b relative overflow-hidden text-white">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvc3ZnPg==')] pointer-events-none"></div>
+            <div class="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row gap-20 items-center">
+                
+                <div class="flex-1 space-y-12">
+                    <div class="flex items-center gap-6">
+                        <span class="text-6xl font-black text-slate-700 uppercase tracking-tighter">04</span>
+                        <h2 class="text-5xl font-black uppercase text-white tracking-tight leading-none drop-shadow-lg">Mapa de StakeHolders<br><span class="text-sky-300 text-3xl italic block mt-2 drop-shadow-md">La brújula de la comunicación táctica</span></h2>
+                    </div>
+                    
+                    <p class="text-xl text-slate-300 font-light leading-relaxed">
+                        Desarrollada para priorizar esfuerzos, la matriz cruza el grado de <strong>Poder</strong> (o influencia sobre el proyecto) contra el de <strong>Interés</strong> (cuánto les afecta los resultados).
+                    </p>
+                    <div class="bg-slate-800/80 p-6 rounded-3xl border-l-4 border-sky-500 backdrop-blur-md">
+                        <h4 class="font-bold text-sky-400 mb-2 uppercase text-xs tracking-widest">Postulado Clave</h4>
+                        <p class="text-sm font-light text-slate-200">Dependiendo del cuadrante en que se ubique un stakeholder, la organización deberá ejecutar estrategias de reporte mensual, apaciguamiento relacional o hasta de "gobernanza y diseño" compartido.</p>
+                    </div>
+                </div>
+
+                <div class="flex-1 matrix-fixed-grid bg-white/5 p-5 rounded-[3.5rem] backdrop-blur-md border border-white/10 shadow-2xl relative mt-10 md:mt-0">
+                    <!-- SATISFACER -->
+                    <div class="bg-indigo-900/60 border-2 border-indigo-400/50 rounded-[2.5rem] flex flex-col justify-center items-center text-center p-8 hover:bg-indigo-800 transition-colors group relative overflow-hidden">
+                        <div class="absolute inset-x-0 top-0 h-1 bg-indigo-400"></div>
+                        <span class="text-xs md:text-sm font-black text-indigo-200 uppercase tracking-widest mb-3">Poder Alto • Interés Bajo</span>
+                        <h4 class="font-black text-white text-3xl md:text-4xl italic mb-3 drop-shadow-md">SATISFACER</h4>
+                        <p class="text-sm text-indigo-100 font-semibold leading-relaxed group-hover:text-white transition-colors">Tienen poca afinidad pero gran poder; mantenlos contentos para evitar que se conviertan en un problema crítico.</p>
+                    </div>
+                    <!-- CLAVE -->
+                    <div class="bg-gradient-to-br from-sky-500 to-indigo-600 text-white rounded-[2.5rem] flex flex-col justify-center items-center text-center p-8 shadow-2xl scale-110 z-10 border-2 border-white ring-8 ring-indigo-500/30 group">
+                        <span class="text-xs md:text-sm font-black text-white uppercase tracking-widest mb-3 drop-shadow-sm">Poder Alto • Interés Alto</span>
+                        <h4 class="font-black text-[2.5rem] md:text-5xl italic mb-3 leading-none drop-shadow-md">CLAVE</h4>
+                        <p class="text-base text-white font-bold leading-relaxed drop-shadow-md">Este es tu grupo principal. Es obligatorio hacerlos partícipes constantemente para garantizar el respaldo del proyecto.</p>
+                    </div>
+                    <!-- MÍNIMO -->
+                    <div class="bg-slate-800 border-2 border-slate-600 rounded-[2.5rem] flex flex-col justify-center items-center text-center p-8 hover:bg-slate-700 transition-colors group">
+                        <span class="text-xs md:text-sm font-black text-slate-300 uppercase tracking-widest mb-3">Poder Bajo • Interés Bajo</span>
+                        <h4 class="font-black text-slate-100 text-2xl md:text-3xl italic mb-3">MÍNIMO</h4>
+                        <p class="text-sm text-slate-200 font-semibold leading-relaxed group-hover:text-white transition-colors">Son de menor prioridad. Bríndales la atención fundamental y vigila ocasionalmente para ver si cambian su actitud.</p>
+                    </div>
+                    <!-- INFORMAR -->
+                    <div class="bg-sky-900/60 border-2 border-sky-400/50 rounded-[2.5rem] flex flex-col justify-center items-center text-center p-8 hover:bg-sky-800 transition-colors group relative overflow-hidden">
+                        <div class="absolute inset-x-0 bottom-0 h-1 bg-sky-400"></div>
+                        <span class="text-xs md:text-sm font-black text-sky-200 uppercase tracking-widest mb-3">Poder Bajo • Interés Alto</span>
+                        <h4 class="font-black text-white text-3xl md:text-4xl italic mb-3 drop-shadow-md">INFORMAR</h4>
+                        <p class="text-sm text-sky-100 font-semibold leading-relaxed group-hover:text-white transition-colors">Fueron atraídos a ti pero con limitado peso directivo. Mantenlos muy bien informados e incentivados como portavoces.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA TRANSICIONAL: REFLEXIÓN VISUAL -->
+        <section id="slide_image" class="bg-slate-900 border-b relative text-white bg-cover bg-center group" style="background-image: url('https://i.imgur.com/vmtdAY7.jpeg'); min-height: 80vh;">
+            <div class="absolute inset-0 bg-slate-900/40 group-hover:bg-slate-900/10 transition-colors duration-700 pointer-events-none"></div>
+            <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent pointer-events-none"></div>
+            
+            <div class="absolute bottom-16 left-12 md:left-20 z-10 scale-95 group-hover:scale-100 transition-transform duration-700">
+                <span class="text-white/60 text-xs md:text-sm font-black tracking-[0.3em] uppercase mb-2 block drop-shadow-md">Estrategia Dinámica</span>
+                <h3 class="text-white text-3xl md:text-5xl font-black italic drop-shadow-[0_10px_10px_rgba(0,0,0,0.8)] leading-none"><br>De la planificación <span class="text-sky-400">a la acción táctica.</span></h3>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 5: REGISTRO TALLER (Paso 05 Práctico) -->
+        <section id="slide5" class="py-24 px-12 bg-white relative">
+            <div class="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+            
+            <div id="registrationBox" class="max-w-[1400px] mx-auto grid grid-cols-1 xl:grid-cols-2 gap-12 items-center relative z-10">
+                <!-- Columna Izquierda: Fotografías de Estudiantes -->
+                <div class="relative h-full flex items-center justify-center order-last xl:order-first mt-10 xl:mt-0 px-8 xl:px-0">
+                    <div class="absolute inset-0 bg-sky-500 rounded-full blur-[120px] opacity-20 pointer-events-none transform -translate-x-10 translate-y-10"></div>
+                    
+                    <div class="relative w-full max-w-lg aspect-square">
+                        <img src="https://i.imgur.com/K9kR7EP.jpeg" alt="Estudiante Trabajando" class="absolute top-0 right-0 w-[65%] h-[75%] object-cover rounded-[3rem] shadow-2xl border-4 border-white transform hover:scale-105 transition-transform duration-500 z-10">
+                        <img src="https://i.imgur.com/04iBy17.jpeg" alt="Estudiante Identidad" class="absolute bottom-0 left-0 w-[60%] h-[65%] object-cover rounded-[3rem] shadow-2xl border-4 border-white transform -translate-y-8 translate-x-4 hover:scale-105 transition-transform duration-500 z-20">
+                        
+                        <div class="absolute bottom-16 right-10 bg-white p-5 rounded-2xl shadow-xl z-30 flex items-center gap-4 animate-bounce">
+                            <i class="fa-solid fa-graduation-cap text-indigo-500 text-3xl"></i>
+                            <div>
+                                <p class="text-xs font-black text-slate-800 uppercase">Futuros Líderes</p>
+                                <p class="text-[10px] text-slate-500">Masterclass 2026</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Formulario -->
+                <div class="bg-slate-900 rounded-[4rem] p-12 md:p-16 text-white shadow-[0_50px_100px_-20px_rgba(15,23,42,0.8)] card-3d relative overflow-hidden ring-4 ring-slate-800/80">
+                    <div class="absolute top-0 right-0 w-80 h-80 bg-sky-500 rounded-full blur-[120px] opacity-30 transform translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+                    
+                    <div class="text-center md:text-left mb-12 relative z-10">
+                        <span class="text-sky-400 font-bold tracking-widest uppercase text-sm mb-4 block">Aplicación Práctica</span>
+                        <h2 class="text-5xl font-black mb-4 uppercase italic tracking-tight">Laboratorio <br>de Casos</h2>
+                        <p class="text-lg text-slate-300 font-light max-w-lg">Ingresa las credenciales de tu equipo de consultoría para desbloquear el simulador de análisis de cuadrantes interactivo.</p>
+                    </div>
+                    
+                    <form id="regForm" class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                        <div class="space-y-3">
+                            <label class="text-xs font-black uppercase text-slate-400 tracking-widest pl-2">Equipo</label>
+                            <input type="text" id="initName" required class="w-full p-5 rounded-[2rem] bg-slate-950 border-2 border-slate-700 outline-none text-lg focus:border-sky-500 focus:bg-slate-900 transition-all font-bold uppercase shadow-inner text-white placeholder-slate-600" placeholder="Ej: Consultora Alpha">
+                        </div>
+                        <div class="space-y-3">
+                            <label class="text-xs font-black uppercase text-slate-400 tracking-widest pl-2">Grupo/Clase</label>
+                            <input type="text" id="groupLevel" required class="w-full p-5 rounded-[2rem] bg-slate-950 border-2 border-slate-700 outline-none text-lg focus:border-sky-500 focus:bg-slate-900 transition-all font-bold uppercase shadow-inner text-white placeholder-slate-600" placeholder="Ej: GRUP-NORTE">
+                        </div>
+                        <div class="md:col-span-2 space-y-3 mt-2">
+                            <label class="text-xs font-black uppercase text-slate-400 tracking-widest pl-2">Miembros de Equipo</label>
+                            <textarea id="participants" placeholder="María Gómez, Juan Pérez, Andrea Silva..." class="w-full p-5 rounded-[2rem] bg-slate-950 border-2 border-slate-700 outline-none text-lg focus:border-sky-500 focus:bg-slate-900 transition-all font-medium shadow-inner text-white resize-none" rows="2"></textarea>
+                        </div>
+                        <button type="button" onclick="startWorkshop()" class="md:col-span-2 mt-6 bg-gradient-to-r from-sky-500 to-indigo-600 text-white py-6 rounded-[2.5rem] font-black text-xl hover:from-sky-400 hover:to-indigo-500 transition-all shadow-xl hover:shadow-[0_20px_40px_-10px_rgba(14,165,233,0.5)] uppercase tracking-wide group hover:-translate-y-1">
+                            Ingresar <i class="fa-solid fa-unlock-keyhole ml-3 text-sky-200 group-hover:scale-110 transition-transform"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 6: PANEL TALLER INTERACTIVO -->
+        <section id="workshop" class="py-20 px-4 md:px-12 bg-slate-50 hidden relative min-h-screen">
+            <div class="max-w-[1600px] mx-auto space-y-10">
+                <!-- Header del caso -->
+                <div class="bg-slate-900 text-white p-10 lg:p-14 rounded-[3.5rem] border-b-[8px] border-indigo-500 shadow-2xl flex flex-col md:flex-row items-center justify-between relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-indigo-600/10 to-transparent pointer-events-none"></div>
+                    <div class="relative z-10 w-full md:w-3/4">
+                        <div class="flex items-center gap-4 mb-6">
+                            <span class="bg-indigo-500/20 border border-indigo-400/50 text-indigo-300 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-inner"><i class="fa-solid fa-satellite-dish mr-2 text-indigo-400"></i>Simulación Activa</span>
+                            <span class="bg-slate-800 text-slate-400 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wide">Fase de Diagnóstico Estratégico</span>
+                        </div>
+                        <h3 id="caseTitle" class="text-4xl lg:text-5xl font-black uppercase italic mb-4 tracking-tight drop-shadow-md text-sky-50"></h3>
+                        <p id="caseDesc" class="text-lg lg:text-xl text-slate-300 font-light leading-relaxed"></p>
+                    </div>
+                    <i class="fa-solid fa-microchip text-[6rem] lg:text-[10rem] text-slate-800/80 -mr-6 md:mt-0 mt-8 relative z-0 hidden md:block"></i>
+                </div>
+
+                <!-- Cuerpo del Layout interactivo -->
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-10 items-stretch">
+                    
+                    <!-- Formulario de Inserción -->
+                    <div class="xl:col-span-4 bg-white p-10 rounded-[3.5rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-slate-100 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-2xl font-black mb-8 uppercase text-slate-800 tracking-tight flex items-center"><span class="bg-sky-100 text-sky-600 w-10 h-10 rounded-xl flex items-center justify-center mr-4 text-xl shadow-sm"><i class="fa-solid fa-crosshairs"></i></span> Mapear Entidad</h4>
+                            
+                            <div class="space-y-8">
+                                <div>
+                                    <label class="block text-xs font-black uppercase text-slate-400 tracking-widest mb-3 pl-2">Stakeholder</label>
+                                    <input type="text" id="stkName" placeholder="Gremio, Organización, Figura..." class="w-full p-5 bg-slate-50 rounded-[1.5rem] outline-none text-lg font-bold border border-slate-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/20 focus:bg-white shadow-inner transition-all text-slate-800 uppercase">
+                                </div>
+                                
+                                <div class="bg-slate-50/80 p-6 rounded-[2rem] border border-slate-200 shadow-sm relative">
+                                    <div class="flex justify-between items-center mb-5">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-bolt text-xs text-sky-500 mr-2"></i>
+                                            <span class="font-black uppercase text-slate-500 text-xs tracking-wide">Nivel de Influencia</span>
+                                        </div>
+                                        <span class="bg-white border border-slate-200 text-sky-600 px-3 py-1 rounded-lg text-sm font-black shadow-sm"><span id="infNum">50</span>%</span>
+                                    </div>
+                                    <input type="range" id="influence" min="1" max="100" value="50" oninput="document.getElementById('infNum').innerText=this.value" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                                    <div class="mt-2 text-[9px] text-slate-400 font-medium flex justify-between px-1 uppercase"><p>Operativo</p><p>Directivo</p></div>
+                                </div>
+
+                                <div class="bg-slate-50/80 p-6 rounded-[2rem] border border-slate-200 shadow-sm relative">
+                                    <div class="flex justify-between items-center mb-5">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-eye text-xs text-indigo-500 mr-2"></i>
+                                            <span class="font-black uppercase text-slate-500 text-xs tracking-wide">Grado de Interés</span>
+                                        </div>
+                                        <span class="bg-white border border-slate-200 text-indigo-600 px-3 py-1 rounded-lg text-sm font-black shadow-sm"><span id="intNum">50</span>%</span>
+                                    </div>
+                                    <input type="range" id="interest" min="1" max="100" value="50" oninput="document.getElementById('intNum').innerText=this.value" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+                                    <div class="mt-2 text-[9px] text-slate-400 font-medium flex justify-between px-1 uppercase"><p>Indiferente</p><p>Crítico</p></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button onclick="addStakeholder()" class="mt-10 w-full bg-slate-900 border border-slate-800 text-white py-6 rounded-[2rem] font-black text-xl hover:bg-sky-600 hover:border-sky-500 transition-all uppercase shadow-lg tracking-wide group flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-plus text-slate-400 group-hover:text-white transition-colors"></i> Incorporar al Radar
+                        </button>
+                    </div>
+
+                    <!-- Cuadrante Analítico -->
+                    <div class="xl:col-span-8 bg-white p-10 rounded-[3.5rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-slate-100 flex flex-col h-full min-h-[600px] xl:min-h-0">
+                        <div class="flexjustify-between items-center mb-8 flex">
+                            <h4 class="text-3xl font-black uppercase text-slate-800 tracking-tight flex-grow flex items-center"><i class="fa-solid fa-chart-line text-indigo-500 mr-4"></i> Mapa de StakeHolders</h4>
+                            <div class="bg-slate-100 px-4 py-2 rounded-xl text-slate-500 font-black text-sm uppercase flex items-center shadow-inner">
+                                Entidades: <span id="stkCount" class="ml-2 bg-slate-800 text-white px-3 py-1 rounded-lg">0</span>
+                            </div>
+                        </div>
+                        
+                        <div id="interactiveQuadrant" class="flex-grow rounded-[2.5rem] relative shadow-inner border border-slate-200 overflow-hidden bg-slate-50/50 min-h-[450px]">
+                            <!-- Fondos de categorización -->
+                            <div class="absolute inset-0 grid grid-cols-2 grid-rows-2 font-black text-xs md:text-sm lg:text-lg text-slate-300 uppercase italic tracking-widest pointer-events-none select-none">
+                                <div class="relative border-r border-b border-slate-200 bg-rose-50/20"><span class="absolute top-6 left-6 text-rose-300/50 scale-150 origin-top-left -rotate-90 md:rotate-0 md:scale-100 translate-y-12 md:translate-y-0">Satisfacer</span></div>
+                                <div class="relative border-b border-slate-200 bg-indigo-50/30"><span class="absolute top-6 right-6 text-indigo-300/60 md:scale-100">Clave</span></div>
+                                <div class="relative border-r border-slate-200 bg-slate-100/40"><span class="absolute bottom-6 left-6 text-slate-300/60 md:scale-100">Mínimo</span></div>
+                                <div class="relative bg-sky-50/20"><span class="absolute bottom-6 right-6 text-sky-300/60 md:scale-100">Informar</span></div>
+                            </div>
+                            
+                            <!-- Ejes Cartesianos -->
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-60 z-0">
+                                <div class="w-full h-[2px] bg-slate-300 shadow-sm relative">
+                                    <div class="absolute right-0 top-1/2 -translate-y-1/2 rotate-45 w-2 h-2 border-t-2 border-r-2 border-slate-400"></div>
+                                </div>
+                                <div class="h-full w-[2px] bg-slate-300 shadow-sm absolute">
+                                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -rotate-45 w-2 h-2 border-t-2 border-l-2 border-slate-400"></div>
+                                </div>
+                            </div>
+
+                            <!-- Textos de Guía de Ejes -->
+                            <div class="absolute top-3 w-full text-center text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] opacity-80 backdrop-blur-sm">Nivel de Influencia Máximo</div>
+                            <div class="absolute bottom-3 w-full text-center text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] opacity-80 backdrop-blur-sm">Influencia Residual</div>
+                            <div class="absolute right-3 top-1/2 -translate-y-1/2 rotate-90 origin-right text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] opacity-80 pl-8">Interés Máximo</div>
+                            <div class="absolute left-3 top-1/2 -translate-y-1/2 -rotate-90 origin-left text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] opacity-80 pr-8">Apatía / Indiferencia</div>
+
+                            <div id="dotsContainer" class="absolute inset-4 pointer-events-none z-10 box-border"></div>
+                        </div>
+
+                        <div class="mt-8 flex justify-end items-center">
+                            <button onclick="finalizarSync()" id="syncBtn" class="bg-indigo-600 border border-indigo-500 text-white px-10 py-5 rounded-[2rem] font-black text-lg uppercase hover:bg-sky-500 hover:border-sky-400 hover:shadow-[0_10px_30px_-10px_rgba(14,165,233,0.6)] transition-all tracking-wider disabled:opacity-50 disabled:cursor-not-allowed group fle gap-3 items-center">
+                                Exportar Protocolo API <i class="fa-solid fa-cloud-arrow-up ml-2 text-indigo-300 group-hover:text-white transition-colors"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- MODAL DE IMAGEN COMPLETA -->
+    <div id="imageModal" class="fixed inset-0 z-[9999] bg-slate-900/95 backdrop-blur-md hidden items-center justify-center p-4 md:p-10 cursor-zoom-out opacity-0 transition-opacity duration-300" onclick="closeModal()">
+        <img id="modalImg" src="" alt="Maximizado" class="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl transform scale-95 transition-transform duration-300">
+        <button class="absolute top-8 right-8 text-white bg-white/10 hover:bg-rose-500 hover:scale-110 rounded-full w-12 h-12 flex items-center justify-center transition-all">
+            <i class="fa-solid fa-xmark text-2xl"></i>
+        </button>
+    </div>
+
+    <script>
+        const CASES = [
+            { title: "Puerto Hidrógeno Verde Austral", desc: "Se proyecta el mayor hub logístico y energético del Cono Sur. El proyecto choca con gremios pesqueros, atrae inversores internacionales y requiere concertación urgente con grupos medioambientales movilizados." },
+            { title: "Salud Digital e IA Predictiva", desc: "Red nacional de diagnósticos predictivos impulsada por el gobierno. Colegios médicos amenazan con huelga por deshumanización del trabajo y las aseguradoras privadas exigen acceso comercial irrestricto a la metadata." },
+            { title: "Tren Magnético Trans-Andino 2026", desc: "Proyecto de mega-infraestructura continental. Corporaciones extranjeras financian la obra, pero asociaciones de vecinos locales amenazan con frenar maquinaria exigiendo mitigación acústica nivel cero vitalicia." }
+        ];
+
+        let registeredStakeholders = []; let teamData = {};
+        let presentationActive = false;
+        let currentSlideIndex = 0;
+        const slides = ["slide0", "slide1", "slide2", "slide3", "slide4", "slide_image", "slide5", "workshop"];
+
+        function togglePresentationMode() {
+            presentationActive = !presentationActive;
+            document.body.classList.toggle('presentation-mode', presentationActive);
+            document.getElementById('mode-text').innerText = presentationActive ? "Retornar a Documento" : "Modo Presentación";
+            
+            if(presentationActive) {
+                showSlide(currentSlideIndex);
+                document.body.style.overflow = 'hidden';
+            } else {
+                slides.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'block'; });
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function showSlide(index) {
+            slides.forEach((id, i) => {
+                const el = document.getElementById(id);
+                if(!el) return;
+                if(i === index) { 
+                    el.classList.add('active-slide'); 
+                    el.style.display = 'flex'; // Usamos flex ahora para el layout de presentation
+                } else { 
+                    el.classList.remove('active-slide'); 
+                    el.style.display = 'none'; 
+                }
+            });
+            const total = slides.length < 10 ? `0${slides.length}` : slides.length;
+            const current = (index + 1) < 10 ? `0${index + 1}` : (index + 1);
+            document.getElementById('slideIndicator').innerText = `${current} / ${total}`;
+            currentSlideIndex = index;
+            window.scrollTo(0,0);
+        }
+
+        function nextSlide() { if(currentSlideIndex < slides.length - 1) showSlide(currentSlideIndex + 1); }
+        function prevSlide() { if(currentSlideIndex > 0) showSlide(currentSlideIndex - 1); }
+
+        function scrollToWorkshop() {
+            if(presentationActive) showSlide(slides.indexOf("slide5"));
+            else document.getElementById('slide5').scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+
+        function startWorkshop() {
+            const init = document.getElementById('initName').value.trim();
+            const group = document.getElementById('groupLevel').value.trim();
+            const participants = document.getElementById('participants').value.trim();
+            
+            if(!init || !group) {
+                alert("Por favor, completa los campos de Equipo y Grupo/Clase antes de generar la clave criptográfica de la sesión.");
+                return;
+            }
+
+            teamData = { init, group, participants };
+            const caseAssigned = CASES[Math.floor(Math.random() * CASES.length)];
+            document.getElementById('caseTitle').innerText = caseAssigned.title;
+            document.getElementById('caseDesc').innerText = caseAssigned.desc;
+            
+            document.getElementById('workshop').classList.remove('hidden');
+            const formBox = document.getElementById('registrationBox');
+            formBox.style.opacity = '0';
+            setTimeout(() => {
+                formBox.parentElement.classList.add('hidden');
+                if(presentationActive) showSlide(slides.indexOf("workshop"));
+                else document.getElementById('workshop').scrollIntoView({behavior: 'smooth'});
+            }, 300);
+        }
+
+        function addStakeholder() {
+            const name = document.getElementById('stkName').value.trim();
+            const inf = parseInt(document.getElementById('influence').value);
+            const int = parseInt(document.getElementById('interest').value);
+            if(!name) {
+                alert("Por favor ingrese el nombre del Stakeholder.");
+                document.getElementById('stkName').focus();
+                return;
+            }
+            
+            let quad = (inf >= 50 && int >= 50) ? "Clave" : (inf >= 50 && int < 50) ? "Satisfacer" : (inf < 50 && int >= 50) ? "Informar" : "Mínimo";
+            const stk = { name, influence: inf, interest: int, quadrant: quad };
+            registeredStakeholders.push(stk);
+            renderDot(stk);
+            
+            // Animación de Reseteo del Entry Level Formulary
+            document.getElementById('stkName').value = '';
+            document.getElementById('stkName').focus();
+            document.getElementById('stkCount').innerText = registeredStakeholders.length;
+            
+            const btn = document.querySelector('button[onclick="addStakeholder()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check text-white"></i> Mapeado con Éxito';
+            btn.classList.replace('bg-slate-900', 'bg-emerald-600');
+            btn.classList.replace('border-slate-800', 'border-emerald-500');
+            setTimeout(() => { 
+                btn.innerHTML = originalText; 
+                btn.classList.replace('bg-emerald-600', 'bg-slate-900');
+                btn.classList.replace('border-emerald-500', 'border-slate-800');
+            }, 1200);
+        }
+
+        function renderDot(stk) {
+            const container = document.getElementById('dotsContainer');
+            const dot = document.createElement('div');
+            dot.className = 'stakeholder-dot';
+            dot.style.left = `${stk.interest}%`;
+            dot.style.top = `${100 - stk.influence}%`;
+            
+            // Colores Semánticos Superpuestos
+            if (stk.quadrant === "Clave") { dot.style.backgroundColor = "#4f46e5"; dot.style.borderColor = "#c7d2fe"; } // Indigo
+            else if (stk.quadrant === "Satisfacer") { dot.style.backgroundColor = "#e11d48"; dot.style.borderColor = "#fecdd3"; } // Rose
+            else if (stk.quadrant === "Informar") { dot.style.backgroundColor = "#0ea5e9"; dot.style.borderColor = "#bae6fd"; } // Sky
+            else { dot.style.backgroundColor = "#475569"; dot.style.borderColor = "#e2e8f0"; } // Slate Neutro
+
+            const label = document.createElement('div');
+            label.className = 'stakeholder-label';
+            label.innerHTML = stk.name;
+            dot.appendChild(label);
+            container.appendChild(dot);
+            
+            // Spring Animation Physics
+            dot.style.opacity = '0';
+            dot.style.transform = 'translate(-50%, -50%) scale(0.1)';
+            setTimeout(() => {
+                dot.style.opacity = '1';
+                dot.style.transform = 'translate(-50%, -50%) scale(1.15)';
+                setTimeout(() => {
+                    dot.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 150);
+            }, 10);
+        }
+
+        async function finalizarSync() {
+            if(registeredStakeholders.length === 0) return alert("Mapa de StakeHolders Vacío: Requiere mapear un mímino de un agente comercial en las coordenadas para certificar el diagnóstico.");
+            
+            const btn = document.getElementById('syncBtn');
+            btn.disabled = true; 
+            btn.innerHTML = 'ESTABLECIENDO CONEXIÓN SEGURA... <i class="fa-solid fa-circle-notch fa-spin ml-3 text-sky-200"></i>';
+            btn.classList.replace('bg-indigo-600', 'bg-slate-600');
+            btn.classList.replace('border-indigo-500', 'border-slate-500');
+            
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiu0IstsrvsrFEAxVgrMpIOE8JX3XQPIsGEoAzy7IYrRi0sX0wzZ_sPo9dDRnYCg3h/exec";
+            try {
+                // Post as No-Cors / WebApp script mode
+                await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    mode: 'no-cors', 
+                    body: JSON.stringify({ team: teamData, stakeholders: registeredStakeholders }) 
+                });
+                
+                btn.innerHTML = 'CERTIFICADO ALMACENADO <i class="fa-solid fa-shield-check ml-3 text-white"></i>';
+                btn.classList.replace('bg-slate-600', 'bg-emerald-600');
+                btn.classList.replace('border-slate-500', 'border-emerald-500');
+                btn.classList.replace('text-white', 'text-emerald-50');
+            } catch (e) {
+                // Network break handle
+                alert("Fallo de Telemetría: Error en la conexión POST al ecosistema de la nube.");
+                btn.disabled = false; 
+                btn.innerHTML = 'RETRANSMITIR EXPORTACIÓN <i class="fa-solid fa-rotate-right ml-3 text-sky-200"></i>';
+                btn.classList.replace('bg-slate-600', 'bg-rose-600');
+                btn.classList.replace('border-slate-500', 'border-rose-500');
+            }
+        }
+
+        // Listener Global para facilitar interactividad (Enter key support y nav)
+        document.addEventListener('keydown', function(event) {
+            // Manejar modal de imagen primero
+            const modal = document.getElementById('imageModal');
+            if(modal && modal.classList.contains('flex')) {
+                if(event.key === 'Escape' || event.key === 'Enter' || event.key === ' ') {
+                    closeModal();
+                }
+                return;
+            }
+
+            // Ignorar eventos si el usuario está escribiendo en un input
+            if(document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+                if(event.key === 'Enter' && document.activeElement.id === 'stkName') {
+                    addStakeholder();
+                    event.preventDefault();
+                }
+                return;
+            }
+
+            // Controles de presentación
+            if(presentationActive) {
+                if(['ArrowRight', 'ArrowDown', 'PageDown', 'Enter'].includes(event.key)) {
+                    nextSlide();
+                    event.preventDefault();
+                } else if(['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) {
+                    prevSlide();
+                    event.preventDefault();
+                }
+            }
+        });
+        
+        // Controladores de Modal
+        function openModal(src) {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('modalImg');
+            
+            img.src = src;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Animación de entrada
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                img.classList.remove('scale-95');
+                img.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('modalImg');
+            
+            modal.classList.add('opacity-0');
+            img.classList.remove('scale-100');
+            img.classList.add('scale-95');
+            
+            // Animación de salida pre ocultamiento flex
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
