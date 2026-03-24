@@ -278,8 +278,8 @@
                     </div>
                 </div>
 
-                <div class="w-full xl:w-1/3 mt-10 xl:mt-0 rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/50 ring-1 ring-slate-200 relative group cursor-pointer" onclick="openModal('https://www.unir.net/wp-content/uploads/2024/09/Stakeholders-mapping-concepto-usos-y-como-desarrollarlo-grafico2.jpg')">
-                    <img src="https://www.unir.net/wp-content/uploads/2024/09/Stakeholders-mapping-concepto-usos-y-como-desarrollarlo-grafico2.jpg" alt="Mapa de Stakeholders Oficial UNIR" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700">
+                <div class="w-full xl:w-1/3 mt-10 xl:mt-0 rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/50 ring-1 ring-slate-200 relative group cursor-pointer" onclick="openModal('https://i.imgur.com/H48aMlG.jpeg')">
+                    <img src="https://i.imgur.com/H48aMlG.jpeg" alt="Mapa de Stakeholders Oficial UNIR" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700">
                     <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                         <i class="fa-solid fa-expand text-white text-5xl drop-shadow-lg"></i>
                     </div>
@@ -340,7 +340,7 @@
         </section>
 
         <!-- DIAPOSITIVA TRANSICIONAL: REFLEXIÓN VISUAL -->
-        <section id="slide_image" class="bg-slate-900 border-b relative text-white bg-cover bg-center group" style="background-image: url('https://i.imgur.com/vmtdAY7.jpeg'); min-height: 80vh;">
+        <section id="slide_image" class="bg-slate-900 border-b relative text-white bg-cover bg-center group" style="background-image: url('https://i.imgur.com/Nb56tkk.jpeg'); min-height: 80vh;">
             <div class="absolute inset-0 bg-slate-900/40 group-hover:bg-slate-900/10 transition-colors duration-700 pointer-events-none"></div>
             <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent pointer-events-none"></div>
             
@@ -360,7 +360,7 @@
                     <div class="absolute inset-0 bg-sky-500 rounded-full blur-[120px] opacity-20 pointer-events-none transform -translate-x-10 translate-y-10"></div>
                     
                     <div class="relative w-full max-w-lg aspect-square">
-                        <img src="https://i.imgur.com/K9kR7EP.jpeg" alt="Estudiante Trabajando" class="absolute top-0 right-0 w-[65%] h-[75%] object-cover rounded-[3rem] shadow-2xl border-4 border-white transform hover:scale-105 transition-transform duration-500 z-10">
+                        <img src="https://i.imgur.com/Yk1t3Fg.jpeg" alt="Estudiante Trabajando" class="absolute top-0 right-0 w-[65%] h-[75%] object-cover rounded-[3rem] shadow-2xl border-4 border-white transform hover:scale-105 transition-transform duration-500 z-10">
                         <img src="https://i.imgur.com/04iBy17.jpeg" alt="Estudiante Identidad" class="absolute bottom-0 left-0 w-[60%] h-[65%] object-cover rounded-[3rem] shadow-2xl border-4 border-white transform -translate-y-8 translate-x-4 hover:scale-105 transition-transform duration-500 z-20">
                         
                         <div class="absolute bottom-16 right-10 bg-white p-5 rounded-2xl shadow-xl z-30 flex items-center gap-4 animate-bounce">
@@ -400,6 +400,18 @@
                             Ingresar <i class="fa-solid fa-unlock-keyhole ml-3 text-sky-200 group-hover:scale-110 transition-transform"></i>
                         </button>
                     </form>
+
+                    <!-- SECCIÓN DE CARGA AÑADIDA -->
+                    <div class="mt-8 pt-8 border-t border-slate-700 relative z-10">
+                        <p class="text-sm text-slate-400 font-light mb-4 text-center">¿Ya tienes un mapa guardado o quieres recuperar tu avance?</p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <input type="text" id="loadTeamName" class="flex-grow p-4 rounded-[1.5rem] bg-slate-950 border-2 border-slate-800 outline-none text-md focus:border-emerald-500 focus:bg-slate-900 transition-all font-bold uppercase shadow-inner text-white placeholder-slate-600" placeholder="Nombre exacto de tu Equipo">
+                            <button type="button" onclick="loadWorkshop()" id="btnLoadMap" class="bg-emerald-600 border border-emerald-500 text-white px-8 py-4 sm:py-0 rounded-[1.5rem] font-bold text-sm hover:bg-emerald-500 hover:shadow-[0_10px_20px_-5px_rgba(16,185,129,0.4)] transition-all uppercase tracking-wide whitespace-nowrap group disabled:opacity-50 flex items-center justify-center">
+                                Cargar <i class="fa-solid fa-download ml-2 text-emerald-200 group-hover:scale-110 transition-transform group-disabled:hidden"></i>
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -524,12 +536,17 @@
     </div>
 
     <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiu0IstsrvsrFEAxVgrMpIOE8JX3XQPIsGEoAzy7IYrRi0sX0wzZ_sPo9dDRnYCg3h/exec";
+        
         const CASES = [
             { title: "Puerto Hidrógeno Verde Austral", desc: "Se proyecta el mayor hub logístico y energético del Cono Sur. El proyecto choca con gremios pesqueros, atrae inversores internacionales y requiere concertación urgente con grupos medioambientales movilizados." },
             { title: "Salud Digital e IA Predictiva", desc: "Red nacional de diagnósticos predictivos impulsada por el gobierno. Colegios médicos amenazan con huelga por deshumanización del trabajo y las aseguradoras privadas exigen acceso comercial irrestricto a la metadata." },
-            { title: "Tren Magnético Trans-Andino 2026", desc: "Proyecto de mega-infraestructura continental. Corporaciones extranjeras financian la obra, pero asociaciones de vecinos locales amenazan con frenar maquinaria exigiendo mitigación acústica nivel cero vitalicia." }
+            { title: "Tren Magnético Trans-Andino 2026", desc: "Proyecto de mega-infraestructura continental. Corporaciones extranjeras financian la obra, pero asociaciones de vecinos locales amenazan con frenar maquinaria exigiendo mitigación acústica nivel cero vitalicia." },
+            { title: "Metrópolis Inteligente y Big Data", desc: "Desarrollo de red de sensores urbanos para optimizar transporte. Sindicatos temen recortes masivos, mientras que organizaciones pro-privacidad amenazan con litigios por el uso comercial de los datos ciudadanos." },
+            { title: "Mega-Planta Desalinizadora Costera", desc: "Iniciativa para garantizar el agua a zonas de sequía extrema. Comunidades turísticas rechazan el impacto paisajístico y ecosistémico, y el sector agroindustrial exige priorización absoluta de sus cuotas de distribución." }
         ];
 
+        let availableCases = [];
         let registeredStakeholders = []; let teamData = {};
         let presentationActive = false;
         let currentSlideIndex = 0;
@@ -587,7 +604,13 @@
             }
 
             teamData = { init, group, participants };
-            const caseAssigned = CASES[Math.floor(Math.random() * CASES.length)];
+            
+            if (availableCases.length === 0) {
+                availableCases = [...CASES];
+                availableCases.sort(() => Math.random() - 0.5); // Barajar casos
+            }
+            const caseAssigned = availableCases.pop();
+
             document.getElementById('caseTitle').innerText = caseAssigned.title;
             document.getElementById('caseDesc').innerText = caseAssigned.desc;
             
@@ -599,6 +622,63 @@
                 if(presentationActive) showSlide(slides.indexOf("workshop"));
                 else document.getElementById('workshop').scrollIntoView({behavior: 'smooth'});
             }, 300);
+        }
+
+        async function loadWorkshop() {
+            const teamInput = document.getElementById('loadTeamName').value.trim();
+            if(!teamInput) return alert("Por favor ingresa el nombre de tu Equipo para poder cargarlo.");
+            
+            const btn = document.getElementById('btnLoadMap');
+            btn.disabled = true;
+            btn.innerHTML = 'BUSCANDO... <i class="fa-solid fa-circle-notch fa-spin ml-2"></i>';
+            
+            try {
+                // Hacer el fetch de datos via JSONP o fetch directo asumiendo CORS en la Web App
+                const response = await fetch(`${SCRIPT_URL}?equipo=${encodeURIComponent(teamInput)}`);
+                const result = await response.json();
+                
+                if (result.status === "error") {
+                    alert(result.message);
+                    btn.disabled = false;
+                    btn.innerHTML = 'Cargar <i class="fa-solid fa-download ml-2 text-emerald-200"></i>';
+                    return;
+                }
+                
+                // Cargar exitoso
+                teamData = result.data.team;
+                registeredStakeholders = []; 
+                document.getElementById('dotsContainer').innerHTML = ''; // Limpiar mapa
+                
+                // Mapear un caso ficticio o general indicando que es cargado
+                document.getElementById('caseTitle').innerText = "Archivo Recuperado: " + teamData.init;
+                document.getElementById('caseDesc').innerText = `Analizando el entorno estratégico configurado por: ${teamData.participants} del grupo [${teamData.group}].\nLos puntos a continuación han sido cargados de la base de datos.`;
+                
+                // Mostrar vista del mapa
+                document.getElementById('workshop').classList.remove('hidden');
+                const formBox = document.getElementById('registrationBox');
+                formBox.style.opacity = '0';
+                setTimeout(() => {
+                    formBox.parentElement.classList.add('hidden');
+                    if(presentationActive) showSlide(slides.indexOf("workshop"));
+                    else document.getElementById('workshop').scrollIntoView({behavior: 'smooth'});
+                    
+                    // Renderizar los puntos uno por uno
+                    result.data.stakeholders.forEach((stk, index) => {
+                        setTimeout(() => {
+                            registeredStakeholders.push(stk);
+                            renderDot(stk);
+                            document.getElementById('stkCount').innerText = registeredStakeholders.length;
+                        }, index * 200); // 200ms delay entre cada put
+                    });
+                }, 300);
+
+            } catch(e) {
+                alert("Hubo un error al intentar comunicar con el servidor para la carga. Verifica tu conexión e intenta de nuevo.");
+                console.error(e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Cargar <i class="fa-solid fa-download ml-2 text-emerald-200"></i>';
+            }
         }
 
         function addStakeholder() {
@@ -673,7 +753,6 @@
             btn.classList.replace('bg-indigo-600', 'bg-slate-600');
             btn.classList.replace('border-indigo-500', 'border-slate-500');
             
-            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiu0IstsrvsrFEAxVgrMpIOE8JX3XQPIsGEoAzy7IYrRi0sX0wzZ_sPo9dDRnYCg3h/exec";
             try {
                 // Post as No-Cors / WebApp script mode
                 await fetch(SCRIPT_URL, { 
